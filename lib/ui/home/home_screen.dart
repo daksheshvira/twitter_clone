@@ -1,4 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:twitter_clone/controllers/controllers.dart';
+import 'package:twitter_clone/data/models/tweet.dart';
 import 'package:twitter_clone/routes/routes.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -9,6 +16,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final dateFormat = DateFormat('dd MMM yyyy hh:mm a');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,9 +32,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: SafeArea(
-        child: Container(),
-        // child: Selector<TweetController, bool>(
-        //     builder: (builder), selector: selector),
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Consumer<TweetController>(
+            builder: (_, model, child) => model.isLoading
+                ? Center(child: CircularProgressIndicator())
+                : _tweetList(model),
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addTweet,
@@ -38,6 +52,69 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushNamed(
       context,
       Routes.tweetAddUpdate,
+    );
+  }
+
+  Widget _tweetList(TweetController model) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: model.streamTweet(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text('Loading');
+        }
+        return ListView.separated(
+          itemBuilder: (_, index) {
+            DocumentSnapshot document = snapshot.data!.docs[index];
+            var tweet = Tweet.fromJson(document.data() as Map<String, dynamic>);
+            return _tweetCard(tweet);
+          },
+          itemCount: snapshot.data!.docs.length,
+          separatorBuilder: (BuildContext context, int index) {
+            return Divider();
+          },
+        );
+      },
+    );
+  }
+
+  Widget _tweetCard(Tweet tweet) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            tweet.tweet,
+            style: GoogleFonts.montserrat(
+              fontSize: 18,
+              fontWeight: FontWeight.normal,
+              fontStyle: FontStyle.normal,
+            ),
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Container(
+            alignment: Alignment.bottomRight,
+            child: Text(
+              dateFormat.format(tweet.updatedTime),
+              style: GoogleFonts.montserrat(
+                fontSize: 12,
+                fontWeight: FontWeight.normal,
+                fontStyle: FontStyle.normal,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    return ListTile(
+      title: Text(tweet.tweet),
+      subtitle: Text(dateFormat.format(tweet.updatedTime)),
     );
   }
 }

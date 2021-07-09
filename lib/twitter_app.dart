@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:twitter_clone/controllers/controllers.dart';
 import 'package:twitter_clone/routes/routes.dart';
@@ -39,7 +40,9 @@ class _TwitterAppState extends State<TwitterApp> {
           primarySwatch: Colors.blue,
           primaryColor: Colors.blue,
           primaryColorLight: Colors.lightBlue,
-          textTheme: TextTheme(),
+          textTheme: GoogleFonts.montserratTextTheme(
+            Theme.of(context).textTheme,
+          ),
         ),
       ),
     );

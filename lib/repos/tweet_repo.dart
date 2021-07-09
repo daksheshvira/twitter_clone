@@ -8,6 +8,10 @@ class TweetRepo {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference tweets = FirebaseFirestore.instance.collection('tweets');
 
+  Stream<QuerySnapshot> streamTweet() {
+    return tweets.orderBy('updatedTime', descending: true).snapshots();
+  }
+
   Future<Responser> addTweet(Tweet tweet) async {
     try {
       if (auth.currentUser != null) {

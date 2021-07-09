@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/data/models/models.dart';
 import 'package:twitter_clone/repos/repos.dart';
@@ -5,11 +6,11 @@ import 'package:twitter_clone/repos/repos.dart';
 class TweetController extends ChangeNotifier {
   final tweetRepo = TweetRepo();
 
-  List<Tweet>? _tweetList;
-
-  List<Tweet>? get tweetList => _tweetList;
-
   bool isLoading = false;
+
+  Stream<QuerySnapshot> streamTweet() {
+    return tweetRepo.streamTweet();
+  }
 
   Future<Responser> addTweet(Tweet tweet) async {
     isLoading = true;
