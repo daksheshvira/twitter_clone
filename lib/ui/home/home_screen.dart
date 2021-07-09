@@ -112,9 +112,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
-    return ListTile(
-      title: Text(tweet.tweet),
-      subtitle: Text(dateFormat.format(tweet.updatedTime)),
-    );
   }
 }

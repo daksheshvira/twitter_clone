@@ -5,14 +5,21 @@ import 'package:twitter_clone/data/models/models.dart';
 import 'package:twitter_clone/ui/common/common.dart';
 import 'package:twitter_clone/utils/utils.dart';
 
-class AddUpdateTweet extends StatelessWidget {
+class AddUpdateTweet extends StatefulWidget {
   final Tweet? tweet;
-  final _tweetController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
 
   AddUpdateTweet({this.tweet});
 
-  ValueNotifier<String> _tempValue = ValueNotifier('');
+  @override
+  _AddUpdateTweetState createState() => _AddUpdateTweetState();
+}
+
+class _AddUpdateTweetState extends State<AddUpdateTweet> {
+  final _tweetController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  final ValueNotifier<String> _tempValue = ValueNotifier('');
 
   @override
   Widget build(BuildContext context) {
@@ -75,14 +82,14 @@ class AddUpdateTweet extends StatelessWidget {
                                   : () {
                                       if (_formKey.currentState!.validate()) {
                                         FocusScope.of(context).unfocus();
-                                        if (tweet == null) {
+                                        if (widget.tweet == null) {
                                           addTweet(model, context);
                                         } else {
                                           editTweet(model, context);
                                         }
                                       }
                                     },
-                              label: tweet != null ? 'Update' : 'Tweet',
+                              label: widget.tweet != null ? 'Update' : 'Tweet',
                             );
                           }),
                 ),
@@ -111,9 +118,9 @@ class AddUpdateTweet extends StatelessWidget {
   }
 
   void editTweet(TweetController model, BuildContext context) {
-    if (_tweetController.text.trim() != tweet!.tweet) {
-      tweet!.tweet = _tweetController.text.trim();
-      model.editTweet(tweet!);
+    if (_tweetController.text.trim() != widget.tweet!.tweet) {
+      widget.tweet!.tweet = _tweetController.text.trim();
+      model.editTweet(widget.tweet!);
     }
   }
 }

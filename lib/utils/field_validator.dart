@@ -5,7 +5,7 @@ abstract class FieldValidator<T> {
   /// the errorText to display when the validation fails
   final String errorText;
 
-  FieldValidator(this.errorText) : assert(errorText != null);
+  FieldValidator(this.errorText);
 
   /// checks the input against the given conditions
   bool isValid(T value);
