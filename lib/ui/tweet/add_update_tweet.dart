@@ -22,11 +22,21 @@ class _AddUpdateTweetState extends State<AddUpdateTweet> {
   final ValueNotifier<String> _tempValue = ValueNotifier('');
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _tweetController.text = widget.tweet!.tweet;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Add your thoughts'),
+        title: Text(
+          widget.tweet != null ? 'Update your thoughts' : 'Add your thoughts',
+        ),
       ),
       body: Container(
         margin: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
@@ -47,7 +57,7 @@ class _AddUpdateTweetState extends State<AddUpdateTweet> {
                   hintText: 'What\'s happening',
                 ),
                 maxLength: 280,
-                maxLines: 5,
+                maxLines: 10,
                 validator: (value) {
                   if (value!.length <= 280) {
                     return null;
@@ -75,7 +85,6 @@ class _AddUpdateTweetState extends State<AddUpdateTweet> {
                       : ValueListenableBuilder<String>(
                           valueListenable: _tempValue,
                           builder: (_, value, __) {
-                            print(value);
                             return AppButton(
                               onPressed: value.isEmpty
                                   ? null
@@ -102,7 +111,6 @@ class _AddUpdateTweetState extends State<AddUpdateTweet> {
   }
 
   Future<void> addTweet(TweetController model, BuildContext context) async {
-    print(_tweetController.text);
     var tweet = Tweet(
       tweet: _tweetController.text.trim(),
       createdTime: DateTime.now(),
@@ -111,16 +119,22 @@ class _AddUpdateTweetState extends State<AddUpdateTweet> {
     var addTweet = await model.addTweet(tweet);
     if (addTweet.isSuccess) {
       context.showSnackBar(addTweet.message);
-      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: true).pop();
     } else {
       context.showSnackBar(addTweet.message);
     }
   }
 
-  void editTweet(TweetController model, BuildContext context) {
+  Future<void> editTweet(TweetController model, BuildContext context) async {
     if (_tweetController.text.trim() != widget.tweet!.tweet) {
       widget.tweet!.tweet = _tweetController.text.trim();
-      model.editTweet(widget.tweet!);
+      var editTweet = await model.editTweet(widget.tweet!);
+      if (editTweet.isSuccess) {
+        context.showSnackBar(editTweet.message);
+        Navigator.of(context, rootNavigator: true).pop();
+      } else {
+        context.showSnackBar(editTweet.message);
+      }
     }
   }
 }

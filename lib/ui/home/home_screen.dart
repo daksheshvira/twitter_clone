@@ -21,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         actions: [
           IconButton(
@@ -82,34 +83,49 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _tweetCard(Tweet tweet) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            tweet.tweet,
-            style: GoogleFonts.montserrat(
-              fontSize: 18,
-              fontWeight: FontWeight.normal,
-              fontStyle: FontStyle.normal,
-            ),
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          Container(
-            alignment: Alignment.bottomRight,
-            child: Text(
-              dateFormat.format(tweet.updatedTime),
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          Routes.tweetAddUpdate,
+          arguments: tweet,
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 16),
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Color(0xfff4f5ff),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              tweet.tweet,
               style: GoogleFonts.montserrat(
-                fontSize: 12,
+                fontSize: 18,
                 fontWeight: FontWeight.normal,
                 fontStyle: FontStyle.normal,
               ),
             ),
-          ),
-        ],
+            SizedBox(
+              height: 8,
+            ),
+            Container(
+              alignment: Alignment.bottomRight,
+              child: Text(
+                dateFormat.format(tweet.updatedTime),
+                style: GoogleFonts.montserrat(
+                  fontSize: 12,
+                  fontWeight: FontWeight.normal,
+                  fontStyle: FontStyle.normal,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

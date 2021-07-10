@@ -23,7 +23,7 @@ class TweetRepo {
               .update({'id': documentReference.id});
 
           return Responser(
-              message: 'Tweet added successfully', isSuccess: false);
+              message: 'Tweet added successfully', isSuccess: true);
         } else {
           return Responser(
               message: 'Error occurred while adding tweet', isSuccess: false);
@@ -44,7 +44,7 @@ class TweetRepo {
       if (auth.currentUser != null) {
         await tweets.doc(tweet.id).update(tweet.toJson());
         return Responser(
-            message: 'Tweet updated successfully', isSuccess: false);
+            message: 'Tweet updated successfully', isSuccess: true);
       } else {
         return Responser(
           message: 'User not logged in',
