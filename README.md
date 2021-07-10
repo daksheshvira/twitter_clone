@@ -2,15 +2,10 @@
 
 Simple 1-person Twitter app using Firebase Auth and Cloud Firestore.
 
-## Getting Started
+## User flow
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. User create account or login to current on login/signup screen
+2. Add tweet using plus icon at bottom
+3. Tweet list will be shown on home screen
+4. By clicking on tweet user can update or delete tweet
+5. By clicking on home screen appbar user icon user can go to profile screen user can see email and logout option

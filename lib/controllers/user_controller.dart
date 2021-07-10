@@ -10,16 +10,31 @@ class UserController extends ChangeNotifier {
 
   User? get user => authRepo.auth.currentUser;
 
-  Future<bool> checkIfUserExists(String email) {
-    return authRepo.checkIfUserExists(email);
+  Future<bool> checkIfUserExists(String email) async {
+    isLoading = true;
+    notifyListeners();
+    var data = await authRepo.checkIfUserExists(email);
+    isLoading = false;
+    notifyListeners();
+    return data;
   }
 
   Future<Responser<User>> signUpUser(String email, String password) {
-    return authRepo.signUpUser(email, password);
+    isLoading = true;
+    notifyListeners();
+    var data = authRepo.signUpUser(email, password);
+    isLoading = false;
+    notifyListeners();
+    return data;
   }
 
   Future<Responser<User>> signInUser(String email, String password) {
-    return authRepo.signInUser(email, password);
+    isLoading = true;
+    notifyListeners();
+    var data = authRepo.signInUser(email, password);
+    isLoading = false;
+    notifyListeners();
+    return data;
   }
 
   bool isUserLoggedIn() {

@@ -59,11 +59,20 @@ class HomeScreen extends StatelessWidget {
       stream: model.streamTweet(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text('Something went wrong');
+          return Center(
+            child: Text(
+              'No tweets',
+              style: GoogleFonts.montserrat(
+                fontSize: 18,
+                fontWeight: FontWeight.normal,
+                fontStyle: FontStyle.normal,
+              ),
+            ),
+          );
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text('Loading');
+          return Center(child: CircularProgressIndicator());
         }
         return ListView.separated(
           physics: NeverScrollableScrollPhysics(),

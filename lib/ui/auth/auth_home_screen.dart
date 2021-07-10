@@ -90,9 +90,13 @@ class _AuthHomeScreenState extends State<AuthHomeScreen> {
                     SizedBox(
                       height: 32,
                     ),
-                    AppButton(
-                      label: 'Sign In',
-                      onPressed: _signIn,
+                    Consumer<UserController>(
+                      builder: (_, model, child) => model.isLoading
+                          ? Center(child: CircularProgressIndicator())
+                          : AppButton(
+                              label: 'Sign In/Up',
+                              onPressed: _signIn,
+                            ),
                     ),
                   ],
                 ),
