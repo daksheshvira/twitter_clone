@@ -55,4 +55,21 @@ class TweetRepo {
       return ErrorHandler.error(e);
     }
   }
+
+  Future<Responser> deleteTweet(Tweet tweet) async {
+    try {
+      if (auth.currentUser != null) {
+        await tweets.doc(tweet.id).delete();
+        return Responser(
+            message: 'Tweet deleted successfully', isSuccess: true);
+      } else {
+        return Responser(
+          message: 'User not logged in',
+          isSuccess: false,
+        );
+      }
+    } catch (e) {
+      return ErrorHandler.error(e);
+    }
+  }
 }

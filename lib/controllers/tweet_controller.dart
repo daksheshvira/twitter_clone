@@ -49,6 +49,24 @@ class TweetController extends ChangeNotifier {
     }
   }
 
+  Future<Responser> deleteTweet(Tweet tweet) async {
+    isLoading = true;
+    notifyListeners();
+    if (tweet.isValid()) {
+      var responser = await tweetRepo.deleteTweet(tweet);
+      isLoading = false;
+      notifyListeners();
+      return responser;
+    } else {
+      isLoading = false;
+      notifyListeners();
+      return Responser(
+        message: 'Something went wrong',
+        isSuccess: false,
+      );
+    }
+  }
+
   Future<Responser> getTweetList() async {
     return Responser(message: 'message', isSuccess: false);
   }

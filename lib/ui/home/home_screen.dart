@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -33,12 +32,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: SafeArea(
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Consumer<TweetController>(
-            builder: (_, model, child) => model.isLoading
-                ? Center(child: CircularProgressIndicator())
-                : _tweetList(model),
+        child: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Consumer<TweetController>(
+              builder: (_, model, child) => model.isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : _tweetList(model),
+            ),
           ),
         ),
       ),
@@ -68,6 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
           return Text('Loading');
         }
         return ListView.separated(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
           itemBuilder: (_, index) {
             DocumentSnapshot document = snapshot.data!.docs[index];
             var tweet = Tweet.fromJson(document.data() as Map<String, dynamic>);
@@ -83,22 +86,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _tweetCard(Tweet tweet) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(16),
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          Routes.tweetAddUpdate,
-          arguments: tweet,
-        );
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 16),
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: Color(0xfff4f5ff),
-        ),
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 16),
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Color(0xfff4f5ff),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            Routes.tweetAddUpdate,
+            arguments: tweet,
+          );
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

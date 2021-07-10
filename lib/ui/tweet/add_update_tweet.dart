@@ -25,7 +25,7 @@ class _AddUpdateTweetState extends State<AddUpdateTweet> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _tweetController.text = widget.tweet!.tweet;
+      _tweetController.text = widget.tweet?.tweet ?? '';
     });
   }
 
@@ -37,6 +37,16 @@ class _AddUpdateTweetState extends State<AddUpdateTweet> {
         title: Text(
           widget.tweet != null ? 'Update your thoughts' : 'Add your thoughts',
         ),
+        actions: [
+          if (widget.tweet != null) ...{
+            IconButton(
+              onPressed: () => _deleteTweet(context),
+              icon: Icon(
+                Icons.delete,
+              ),
+            ),
+          },
+        ],
       ),
       body: Container(
         margin: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
@@ -92,9 +102,9 @@ class _AddUpdateTweetState extends State<AddUpdateTweet> {
                                       if (_formKey.currentState!.validate()) {
                                         FocusScope.of(context).unfocus();
                                         if (widget.tweet == null) {
-                                          addTweet(model, context);
+                                          _addTweet(model, context);
                                         } else {
-                                          editTweet(model, context);
+                                          _editTweet(model, context);
                                         }
                                       }
                                     },
@@ -110,7 +120,7 @@ class _AddUpdateTweetState extends State<AddUpdateTweet> {
     );
   }
 
-  Future<void> addTweet(TweetController model, BuildContext context) async {
+  Future<void> _addTweet(TweetController model, BuildContext context) async {
     var tweet = Tweet(
       tweet: _tweetController.text.trim(),
       createdTime: DateTime.now(),
@@ -125,7 +135,7 @@ class _AddUpdateTweetState extends State<AddUpdateTweet> {
     }
   }
 
-  Future<void> editTweet(TweetController model, BuildContext context) async {
+  Future<void> _editTweet(TweetController model, BuildContext context) async {
     if (_tweetController.text.trim() != widget.tweet!.tweet) {
       widget.tweet!.tweet = _tweetController.text.trim();
       var editTweet = await model.editTweet(widget.tweet!);
@@ -135,6 +145,18 @@ class _AddUpdateTweetState extends State<AddUpdateTweet> {
       } else {
         context.showSnackBar(editTweet.message);
       }
+    }
+  }
+
+  Future<void> _deleteTweet(BuildContext context) async {
+    widget.tweet!.tweet = _tweetController.text.trim();
+    var deleteTweet =
+        await context.read<TweetController>().deleteTweet(widget.tweet!);
+    if (deleteTweet.isSuccess) {
+      context.showSnackBar(deleteTweet.message);
+      Navigator.of(context, rootNavigator: true).pop();
+    } else {
+      context.showSnackBar(deleteTweet.message);
     }
   }
 }
