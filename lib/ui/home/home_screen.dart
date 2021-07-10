@@ -7,14 +7,7 @@ import 'package:twitter_clone/controllers/controllers.dart';
 import 'package:twitter_clone/data/models/tweet.dart';
 import 'package:twitter_clone/routes/routes.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreen extends StatelessWidget {
   final dateFormat = DateFormat('dd MMM yyyy hh:mm a');
 
   @override
@@ -22,11 +15,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        // backgroundColor: Colors.white,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.profile);
+            },
             icon: Icon(
               Icons.person,
+              color: Colors.black,
             ),
           ),
         ],
@@ -44,13 +41,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addTweet,
+        onPressed: () => _addTweet(context),
         child: Icon(Icons.add),
       ),
     );
   }
 
-  void _addTweet() {
+  void _addTweet(BuildContext context) {
     Navigator.pushNamed(
       context,
       Routes.tweetAddUpdate,
@@ -74,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
           itemBuilder: (_, index) {
             DocumentSnapshot document = snapshot.data!.docs[index];
             var tweet = Tweet.fromJson(document.data() as Map<String, dynamic>);
-            return _tweetCard(tweet);
+            return _tweetCard(tweet, context);
           },
           itemCount: snapshot.data!.docs.length,
           separatorBuilder: (BuildContext context, int index) {
@@ -85,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _tweetCard(Tweet tweet) {
+  Widget _tweetCard(Tweet tweet, BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 16),
       padding: EdgeInsets.all(16),

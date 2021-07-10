@@ -34,8 +34,8 @@ class _TwitterAppState extends State<TwitterApp> {
         ],
         theme: ThemeData(
           brightness: Brightness.light,
-          primarySwatch: Colors.blue,
-          primaryColor: Colors.blue,
+          primarySwatch: Colors.indigo,
+          primaryColor: Colors.white,
           primaryColorLight: Colors.lightBlue,
           textTheme: GoogleFonts.montserratTextTheme(
             Theme.of(context).textTheme,

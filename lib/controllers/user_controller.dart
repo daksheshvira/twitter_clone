@@ -6,6 +6,10 @@ import 'package:twitter_clone/repos/repos.dart';
 class UserController extends ChangeNotifier {
   final authRepo = UserRepo();
 
+  bool isLoading = false;
+
+  User? get user => authRepo.auth.currentUser;
+
   Future<bool> checkIfUserExists(String email) {
     return authRepo.checkIfUserExists(email);
   }
@@ -20,5 +24,14 @@ class UserController extends ChangeNotifier {
 
   bool isUserLoggedIn() {
     return authRepo.isUserLoggedIn();
+  }
+
+  Future<bool> logout() async {
+    isLoading = true;
+    notifyListeners();
+    var bool = await authRepo.logout();
+    isLoading = false;
+    notifyListeners();
+    return bool;
   }
 }

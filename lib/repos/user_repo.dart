@@ -65,4 +65,13 @@ class UserRepo {
       return false;
     }
   }
+
+  Future<bool> logout() async {
+    try {
+      await auth.signOut();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

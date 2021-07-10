@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:twitter_clone/data/models/models.dart';
 import 'package:twitter_clone/ui/auth/auth.dart';
 import 'package:twitter_clone/ui/home/home.dart';
+import 'package:twitter_clone/ui/profile/profile_screen.dart';
 import 'package:twitter_clone/ui/splash_screen.dart';
 import 'package:twitter_clone/ui/tweet/add_update_tweet.dart';
 
@@ -11,8 +12,8 @@ class Routes {
   static const splash = '/';
   static const auth = '/auth-screen';
   static const home = '/home-screen';
-
   static const tweetAddUpdate = '/tweet-add-update';
+  static const profile = '/profile-screen';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     final args = settings.arguments;
@@ -42,6 +43,12 @@ class Routes {
                   tweet: args as Tweet,
                 )
               : AddUpdateTweet(),
+          settings: settings,
+        );
+
+      case Routes.profile:
+        return MaterialPageRoute(
+          builder: (_) => ProfileScreen(),
           settings: settings,
         );
 
