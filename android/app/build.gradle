@@ -27,27 +27,9 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 apply plugin: 'com.google.gms.google-services'
 
 
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('keystore.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-} else {
-    keystoreProperties.setProperty('storePassword', System.getenv('KEY_STORE_PASSWORD'));
-    keystoreProperties.setProperty('keyPassword', System.getenv('KEY_PASSWORD'));
-    keystoreProperties.setProperty('keyAlias', System.getenv('ALIAS'));
-    keystoreProperties.setProperty('storeFile', System.getenv('KEY_PATH'));
-}
-
 android {
-    signingConfigs {
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-        }
-    }
-    compileSdkVersion 30
+
+    compileSdkVersion 31
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -56,18 +38,13 @@ android {
     defaultConfig {
         applicationId "dev.dakshesh.twitter_clone"
         minSdkVersion 24
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
     }
 
     buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.release
-        }
         debug {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
